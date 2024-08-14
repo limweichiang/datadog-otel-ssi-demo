@@ -22,11 +22,17 @@ Clone this repository into your workspace
 git clone https://github.com/limweichiang/datadog-otel-ssi-demo.git
 ```
 
+Install the Datadog Operator and create an API key for the Datadog Agents to make use of:
+```
+helm repo add datadog https://helm.datadoghq.com
+helm install datadog-operator datadog/datadog-operator
+kubectl create secret generic datadog-secret --from-literal api-key=<DATADOG_API_KEY>
+```
+
 ## Scenario 1: Datadog Agent + Datadog APM Single Step Instrumentation
 
-Install the Datadog Operator, then deploy the Datadog Agent with Single Step APM Instrumentation:
+Deploy the Datadog Agent with Single Step APM Instrumentation:
 ```
-helm install datadog-operator datadog/datadog-operator
 kubectl apply -f datadog-demo/datadog-operator-datadog-config.yaml 
 ```
 
@@ -44,9 +50,8 @@ Use your browser of choice to acess `http://localhost:8080`, then perform some s
 
 ## Scenario 2: Datadog Agent with OTLP ingest + OpenTelemetry Automatic Instrumentation
 
-Install the Datadog Operator, then deploy the Datadog Agent with OTLP receivers configured.
+Deploy the Datadog Agent with OTLP receivers configured.
 ```
-helm install datadog-operator datadog/datadog-operator
 kubectl apply -f otel-demo/datadog-operator-otel-config.yaml
 ```
 
@@ -72,3 +77,10 @@ kubectl port-forward svc/liferay-service 8080:80
 ```
 
 Use your browser of choice to acess `http://localhost:8080`, then perform some simple actions with the application. This is simply to generate APM traces, which you should then see on the Datadog App.
+
+# References
+
+- [Datadog - Install the Datadog Agent on Kubernetes](https://docs.datadoghq.com/containers/kubernetes/installation?tab=datadogoperator)
+- [Datadog - Single Step APM Instrumentation](https://docs.datadoghq.com/tracing/trace_collection/automatic_instrumentation/single-step-apm/?tab=kubernetes)
+- [Datadog - OTLP Ingestion by the Datadog Agent](https://docs.datadoghq.com/opentelemetry/interoperability/otlp_ingest_in_the_agent/?tab=kuberneteshelmvaluesyaml#enabling-otlp-ingestion-on-the-datadog-agent)
+- [OpenTelemetry - Injecting Auto-instrumentation](https://opentelemetry.io/docs/kubernetes/operator/automatic/)
