@@ -1,0 +1,32 @@
+apiVersion: datadoghq.com/v2alpha1
+kind: DatadogAgent
+metadata:
+  name: datadog
+spec:
+  global:
+    clusterName: my-dev-cluster
+    registry: public.ecr.aws/datadog
+    site: datadoghq.com
+    tags:
+      - env:dev
+    credentials:
+      apiSecret:
+        secretName: datadog-secret
+        keyName: api-key
+  features:
+    logCollection:
+      enabled: true
+      containerCollectAll: true
+    npm:
+      enabled: true
+    liveProcessCollection:
+      enabled: true
+    otlp:
+      receiver:
+        protocols:
+          grpc:
+            enabled: true
+          http:
+            enabled: true
+
+
